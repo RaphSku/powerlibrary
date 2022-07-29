@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/RaphSku/powerlibrary/tree/main/services/books/handlers"
+	"github.com/RaphSku/powerlibrary/tree/main/services/books/validation"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 )
@@ -23,14 +24,16 @@ func main() {
 	getRouter.HandleFunc("/api/v1/books/{id:[0-9]+}", handlers.GetBookById)
 
 	postRouter := servermux.Methods(http.MethodPost).Subrouter()
-	postRouter.Use(handlers.ValidateRequestBodyMw)
+	postRouter.Use(validation.ValidateRequestBodyMw)
 	postRouter.HandleFunc("/api/v1/book/", handlers.PostBook)
 	postRouter.HandleFunc("/api/v1/books/", handlers.PostBooks)
 
 	putRouter := servermux.Methods(http.MethodPut).Subrouter()
+	putRouter.Use(validation.ValidateRequestBodyMw)
 	putRouter.HandleFunc("/api/v1/books/{id:[0-9]+}", handlers.PutBook)
 
 	deleteRouter := servermux.Methods(http.MethodDelete).Subrouter()
+	deleteRouter.Use(validation.ValidateRequestBodyMw)
 	deleteRouter.HandleFunc("/api/v1/books/{id:[0-9]+}", handlers.DeleteBook)
 
 	handler := cors.Default().Handler(servermux)

@@ -1,15 +1,16 @@
-package handlers
+package validation
 
 import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"regexp"
 	"time"
+
+	"github.com/RaphSku/powerlibrary/tree/main/services/books/handlers"
+	"github.com/RaphSku/powerlibrary/tree/main/services/books/utilities"
 )
 
 func ValidateRequestBodyMw(next http.Handler) http.Handler {
@@ -17,27 +18,73 @@ func ValidateRequestBodyMw(next http.Handler) http.Handler {
 		if r.URL.Path == "/api/v1/book/" {
 			requestBytes, err := ioutil.ReadAll(r.Body)
 			if err != nil {
-
+				w.WriteHeader(400)
+				w.Header().Set("Content-Type", "application/json")
+				json := utilities.ErrorMessageToJson(err, "request body could not be read")
+				w.Write(json)
+				return
 			}
 			r.Body.Close()
 			r.Body = ioutil.NopCloser(bytes.NewBuffer(requestBytes))
 
-			var book *Book
+			var book *handlers.Book
 			err = json.NewDecoder(r.Body).Decode(&book)
 			if err != nil {
-
+				w.WriteHeader(400)
+				w.Header().Set("Content-Type", "application/json")
+				json := utilities.ErrorMessageToJson(err, "request body could not be decoded into book")
+				w.Write(json)
+				return
 			}
 
 			err = validateBook(book)
 			if err != nil {
 				w.WriteHeader(400)
 				w.Header().Set("Content-Type", "application/json")
-				response := make(map[string]string)
-				response["error"] = fmt.Sprintf("Validation Error occured with the following message: %s", err)
-				json, err := json.Marshal(response)
+				json := utilities.ErrorMessageToJson(err, "validation failed")
+				w.Write(json)
+				return
+			}
+
+			r.Body = ioutil.NopCloser(bytes.NewBuffer(requestBytes))
+		} else if r.URL.Path == "/api/v1/books/" {
+			requestBytes, err := ioutil.ReadAll(r.Body)
+			if err != nil {
+				w.WriteHeader(400)
+				w.Header().Set("Content-Type", "application/json")
+				json := utilities.ErrorMessageToJson(err, "request body could not be read")
+				w.Write(json)
+				return
+			}
+			r.Body.Close()
+			r.Body = ioutil.NopCloser(bytes.NewBuffer(requestBytes))
+
+			var books handlers.Books
+			err = json.NewDecoder(r.Body).Decode(&books)
+			if err != nil {
+				w.WriteHeader(400)
+				w.Header().Set("Content-Type", "application/json")
+				json := utilities.ErrorMessageToJson(err, "request body could not be decoded into books")
+				w.Write(json)
+				return
+			}
+
+			validationFailed := false
+			var lastEmittedError error
+			errorMessage := ""
+			for _, book := range books {
+				err = validateBook(book)
 				if err != nil {
-					log.Fatalf("JSON Marshal did not work. Err: %s", err)
+					errorMessage = errorMessage + "err\n"
+					lastEmittedError = err
+					validationFailed = true
 				}
+			}
+
+			if validationFailed {
+				w.WriteHeader(400)
+				w.Header().Set("Content-Type", "application/json")
+				json := utilities.ErrorMessageToJson(lastEmittedError, "validation failed")
 				w.Write(json)
 				return
 			}
@@ -49,7 +96,7 @@ func ValidateRequestBodyMw(next http.Handler) http.Handler {
 	})
 }
 
-func validateBook(book *Book) error {
+func validateBook(book *handlers.Book) error {
 	title := book.Title
 	uni := []rune(title)
 	if len(uni) > 40 || len(uni) == 0 {
