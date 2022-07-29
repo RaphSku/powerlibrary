@@ -1,0 +1,40 @@
+.add {
+    max-width: 600px;
+}
+
+.form-books {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    font-size: var(--font-size-400);
+}
+
+.form-books > label > input {
+    border: none;
+    border-radius: 1rem;
+    background-color: var(--primary-color-600);
+
+    color: var(--font-secondary-color);
+}
+
+.form-books > label > input:focus-visible {
+    outline: none;
+    background-color: var(--primary-color-700);
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+@media (min-width: 500px) {
+    .add {
+        margin: 0 auto;
+    }
+}

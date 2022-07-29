@@ -1,5 +1,14 @@
 import axios from 'axios';
-import { Book } from "../components/Header";
+
+export interface Book {
+    id: number,
+    title: string,
+    subtitle: string,
+    author: string,
+    isbn: string,
+    edition: number,
+    year: number
+}
 
 export async function getBooks() {
     const response = await axios.get("http://localhost:9090/api/v1/books/");
