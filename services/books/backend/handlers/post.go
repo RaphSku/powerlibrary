@@ -58,11 +58,11 @@ func PostBooks(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 
-	var manyBooks Books
+	var manyBooks BookSlice
 	json.NewDecoder(r.Body).Decode(&manyBooks)
 
 	var insertedBooks Books
-	for _, book := range manyBooks {
+	for _, book := range manyBooks.Books {
 		var newID int
 		sqlStatement := `INSERT INTO books(Title, Subtitle, Author, ISBN, Edition, Year) VALUES ($1, $2, $3, $4, $5, $6) RETURNING ID`
 		db.QueryRow(sqlStatement, &book.Title, &book.Subtitle, &book.Author, &book.ISBN, &book.Edition, &book.Year).Scan(&newID)

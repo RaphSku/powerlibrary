@@ -33,7 +33,6 @@ func main() {
 	putRouter.HandleFunc("/api/v1/books/{id:[0-9]+}", handlers.PutBook)
 
 	deleteRouter := servermux.Methods(http.MethodDelete).Subrouter()
-	deleteRouter.Use(validation.ValidateRequestBodyMw)
 	deleteRouter.HandleFunc("/api/v1/books/{id:[0-9]+}", handlers.DeleteBook)
 
 	handler := cors.Default().Handler(servermux)

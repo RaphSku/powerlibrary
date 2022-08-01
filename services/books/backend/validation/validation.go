@@ -59,7 +59,7 @@ func ValidateRequestBodyMw(next http.Handler) http.Handler {
 			r.Body.Close()
 			r.Body = ioutil.NopCloser(bytes.NewBuffer(requestBytes))
 
-			var books handlers.Books
+			var books handlers.BookSlice
 			err = json.NewDecoder(r.Body).Decode(&books)
 			if err != nil {
 				w.WriteHeader(400)
@@ -72,7 +72,7 @@ func ValidateRequestBodyMw(next http.Handler) http.Handler {
 			validationFailed := false
 			var lastEmittedError error
 			errorMessage := ""
-			for _, book := range books {
+			for _, book := range books.Books {
 				err = validateBook(book)
 				if err != nil {
 					errorMessage = errorMessage + "err\n"

@@ -37,3 +37,7 @@ type Book struct {
 }
 
 type Books []*Book
+
+type BookSlice struct {
+	Books []*Book `json:"books"`
+}
