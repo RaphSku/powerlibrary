@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: powerlibrary-books-backend
+  labels:
+    app.powerlibrary.io/name: books-backend
+spec:
+  containers:
+    - name: books-backend
+      image: pl-books-v1
+      ports:
+        - containerPort: 8000
+      resources:
+        requests:      
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"

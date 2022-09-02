@@ -38,7 +38,7 @@ func main() {
 	handler := cors.Default().Handler(servermux)
 
 	server := &http.Server{
-		Addr:         ":9090",
+		Addr:         ":8000",
 		Handler:      handler,
 		IdleTimeout:  120 * time.Second,
 		ReadTimeout:  3 * time.Second,

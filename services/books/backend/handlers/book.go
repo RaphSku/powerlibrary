@@ -11,7 +11,7 @@ const (
 	host     = "localhost"
 	port     = 5432
 	user     = "raphael"
-	password = "leber51a"
+	password = "test1"
 	dbname   = "powerlibrary"
 )
 
