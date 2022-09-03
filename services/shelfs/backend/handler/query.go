@@ -1,6 +1,8 @@
 package handler
 
-import "github.com/graphql-go/graphql"
+import (
+	"github.com/graphql-go/graphql"
+)
 
 var QueryType = graphql.NewObject(
 	graphql.ObjectConfig{
@@ -17,18 +19,18 @@ var QueryType = graphql.NewObject(
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 					db, err := ConnectToPSQL()
 					if err != nil {
-
+						return nil, err
 					}
 
 					id, ok := p.Args["id"].(int)
 					if !ok {
-
+						return nil, ArgumentMissing{"id"}
 					}
 
-					sqlStatement := `SELECT * FROM Shelf WHERE id=$1`
+					sqlStatement := `SELECT * FROM shelfs WHERE id=$1`
 					row, err := db.Query(sqlStatement, id)
 					if err != nil {
-
+						return nil, err
 					}
 					defer row.Close()
 
@@ -42,7 +44,7 @@ var QueryType = graphql.NewObject(
 
 					err = row.Err()
 					if err != nil {
-
+						return nil, err
 					}
 
 					return shelf, nil
@@ -54,13 +56,13 @@ var QueryType = graphql.NewObject(
 				Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 					db, err := ConnectToPSQL()
 					if err != nil {
-
+						return nil, err
 					}
 
-					sqlStatement := `SELECT * FROM Shelf`
+					sqlStatement := `SELECT * FROM shelfs`
 					rows, err := db.Query(sqlStatement)
 					if err != nil {
-
+						return nil, err
 					}
 					defer rows.Close()
 
@@ -70,7 +72,7 @@ var QueryType = graphql.NewObject(
 
 						err = rows.Scan(&shelf.ID, &shelf.Location, &shelf.Room)
 						if err != nil {
-
+							return nil, err
 						}
 
 						shelfs = append(shelfs, &shelf)
@@ -78,7 +80,7 @@ var QueryType = graphql.NewObject(
 
 					err = rows.Err()
 					if err != nil {
-
+						return nil, err
 					}
 
 					return shelfs, nil

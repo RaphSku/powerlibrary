@@ -1,6 +1,8 @@
 package handler
 
-import "github.com/graphql-go/graphql"
+import (
+	"github.com/graphql-go/graphql"
+)
 
 var MutationType = graphql.NewObject(graphql.ObjectConfig{
 	Name: "Mutation",
@@ -19,7 +21,7 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 				db, err := ConnectToPSQL()
 				if err != nil {
-
+					return nil, err
 				}
 
 				var shelf Shelf
@@ -27,10 +29,10 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				shelf.Location = params.Args["location"].(string)
 
 				var newID int64
-				sqlStatement := `INSERT INTO shelf(Room, Location) VALUES ($1, $2) RETURNING ID`
+				sqlStatement := `INSERT INTO shelfs(Room, Location) VALUES ($1, $2) RETURNING ID`
 				err = db.QueryRow(sqlStatement, &shelf.Room, &shelf.Location).Scan(&newID)
 				if err != nil {
-
+					return nil, err
 				}
 
 				shelf.ID = newID
@@ -55,14 +57,14 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 				db, err := ConnectToPSQL()
 				if err != nil {
-
+					return nil, err
 				}
 
 				var shelf Shelf
-				sqlStatement := `UPDATE shelf SET room=$1, location=$2 WHERE id=$3 RETURNING id, room, location`
+				sqlStatement := `UPDATE shelfs SET room=$1, location=$2 WHERE id=$3 RETURNING id, room, location`
 				err = db.QueryRow(sqlStatement, params.Args["room"].(string), params.Args["location"].(string), params.Args["id"].(int64)).Scan(&shelf.ID, &shelf.Room, &shelf.Location)
 				if err != nil {
-
+					return nil, err
 				}
 
 				return shelf, nil
@@ -85,14 +87,14 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 			Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 				db, err := ConnectToPSQL()
 				if err != nil {
-
+					return nil, err
 				}
 
 				var shelf Shelf
-				sqlStatement := `DELETE FROM shelf WHERE id=$1 RETURNING id`
+				sqlStatement := `DELETE FROM shelfs WHERE id=$1 RETURNING id`
 				err = db.QueryRow(sqlStatement, params.Args["id"].(int64)).Scan(&shelf.ID)
 				if err != nil {
-
+					return nil, err
 				}
 
 				return shelf, nil

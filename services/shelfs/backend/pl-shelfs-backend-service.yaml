@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pl-shelfs-backend-service
+spec:
+  selector:
+    app.powerlibrary.io/name: shelfs-backend
+  ports:
+    - name: pl-shelfs-backend-port
+      protocol: TCP
+      port: 8081
+      targetPort: 8081
