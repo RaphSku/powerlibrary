@@ -9,6 +9,9 @@ var ShelfType = graphql.NewObject(
 			"id": &graphql.Field{
 				Type: graphql.Int,
 			},
+			"name": &graphql.Field{
+				Type: graphql.String,
+			},
 			"room": &graphql.Field{
 				Type: graphql.String,
 			},

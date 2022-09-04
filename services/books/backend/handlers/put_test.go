@@ -15,7 +15,8 @@ import (
 func TestPutBookS01(t *testing.T) {
 	targetId := Setup(t)
 
-	body := []byte(`{"title": "Testing", "subtitle": "Unit Test - The Easy Way", "author": "George M.", "isbn": "247-2257225794", "edition": 1, "year": 2020}`)
+	body := []byte(`{"title": "Testing", "subtitle": "Unit Test - The Easy Way", "author": "George M.", 
+				     "isbn": "247-2257225794", "edition": 1, "year": 2020, "shelf_name": "Violet", "shelf_level": 2}`)
 	request, err := http.NewRequest("PUT", fmt.Sprintf("http://localhost/api/v1/books/%v", targetId), bytes.NewBuffer(body))
 	if err != nil {
 		t.Fatal(err)

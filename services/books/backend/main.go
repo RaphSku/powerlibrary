@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -12,11 +13,17 @@ import (
 	"github.com/RaphSku/powerlibrary/tree/main/services/books/handlers"
 	"github.com/RaphSku/powerlibrary/tree/main/services/books/validation"
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 	"github.com/rs/cors"
 )
 
 func main() {
 	logger := log.New(os.Stdout, "books", log.LstdFlags)
+	err := godotenv.Load("properties.env")
+	if err != nil {
+		logger.Fatalf("error occured with the message: %s", err)
+	}
+	handlers.LoadProperties()
 
 	servermux := mux.NewRouter()
 	getRouter := servermux.Methods(http.MethodGet).Subrouter()
@@ -36,9 +43,10 @@ func main() {
 	deleteRouter.HandleFunc("/api/v1/books/{id:[0-9]+}", handlers.DeleteBook)
 
 	handler := cors.Default().Handler(servermux)
+	port := os.Getenv("SERVER_PORT")
 
 	server := &http.Server{
-		Addr:         ":8000",
+		Addr:         fmt.Sprintf(":%s", port),
 		Handler:      handler,
 		IdleTimeout:  120 * time.Second,
 		ReadTimeout:  3 * time.Second,

@@ -28,7 +28,7 @@ func LoadProperties() {
 
 	LoadedProperties.Host = os.Getenv("HOST")
 	LoadedProperties.Dbname = os.Getenv("DB_DBNAME")
-	LoadedProperties.Port = os.Getenv("PORT")
+	LoadedProperties.Port = os.Getenv("DB_PORT")
 	LoadedProperties.User = os.Getenv("DB_USER")
 	LoadedProperties.Password = os.Getenv("DB_PASSWORD")
 }
@@ -50,6 +50,7 @@ func ConnectToPSQL() (*sql.DB, error) {
 
 type Shelf struct {
 	ID       int64  `json:"id"`
+	Name     string `json:"name"`
 	Room     string `json:"room"`
 	Location string `json:"location"`
 }

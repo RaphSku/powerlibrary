@@ -11,6 +11,9 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 			Type:        ShelfType,
 			Description: "Create new shelf",
 			Args: graphql.FieldConfigArgument{
+				"name": &graphql.ArgumentConfig{
+					Type: graphql.NewNonNull(graphql.String),
+				},
 				"room": &graphql.ArgumentConfig{
 					Type: graphql.NewNonNull(graphql.String),
 				},
@@ -25,12 +28,13 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				}
 
 				var shelf Shelf
+				shelf.Name = params.Args["name"].(string)
 				shelf.Room = params.Args["room"].(string)
 				shelf.Location = params.Args["location"].(string)
 
 				var newID int64
-				sqlStatement := `INSERT INTO shelfs(Room, Location) VALUES ($1, $2) RETURNING ID`
-				err = db.QueryRow(sqlStatement, &shelf.Room, &shelf.Location).Scan(&newID)
+				sqlStatement := `INSERT INTO shelfs(Name, Room, Location) VALUES ($1, $2, $3) RETURNING ID`
+				err = db.QueryRow(sqlStatement, &shelf.Name, &shelf.Room, &shelf.Location).Scan(&newID)
 				if err != nil {
 					return nil, err
 				}
@@ -47,6 +51,9 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				"id": &graphql.ArgumentConfig{
 					Type: graphql.NewNonNull(graphql.Int),
 				},
+				"name": &graphql.ArgumentConfig{
+					Type: graphql.NewNonNull(graphql.String),
+				},
 				"room": &graphql.ArgumentConfig{
 					Type: graphql.NewNonNull(graphql.String),
 				},
@@ -61,8 +68,9 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 				}
 
 				var shelf Shelf
-				sqlStatement := `UPDATE shelfs SET room=$1, location=$2 WHERE id=$3 RETURNING id, room, location`
-				err = db.QueryRow(sqlStatement, params.Args["room"].(string), params.Args["location"].(string), params.Args["id"].(int64)).Scan(&shelf.ID, &shelf.Room, &shelf.Location)
+				sqlStatement := `UPDATE shelfs SET name=$1, room=$2, location=$3 WHERE id=$4 RETURNING id, name, room, location`
+				err = db.QueryRow(sqlStatement, params.Args["name"].(string), params.Args["room"].(string), params.Args["location"].(string),
+					params.Args["id"].(int64)).Scan(&shelf.ID, &shelf.Name, &shelf.Room, &shelf.Location)
 				if err != nil {
 					return nil, err
 				}
@@ -76,6 +84,9 @@ var MutationType = graphql.NewObject(graphql.ObjectConfig{
 			Args: graphql.FieldConfigArgument{
 				"id": &graphql.ArgumentConfig{
 					Type: graphql.NewNonNull(graphql.Int),
+				},
+				"name": &graphql.ArgumentConfig{
+					Type: graphql.NewNonNull(graphql.String),
 				},
 				"room": &graphql.ArgumentConfig{
 					Type: graphql.NewNonNull(graphql.String),

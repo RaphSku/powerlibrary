@@ -26,7 +26,8 @@ func TearDown(t *testing.T, id int) {
 }
 
 func TestPostBook(t *testing.T) {
-	body := []byte(`{"title": "Testing", "subtitle": "How To Unit Test Advanced", "author": "George M.", "isbn": "247-2257225794", "edition": 2, "year": 2018}`)
+	body := []byte(`{"title": "Testing", "subtitle": "How To Unit Test Advanced", "author": "George M.", "isbn": "247-2257225794", "edition": 2, 
+					 "year": 2018, "shelf_name": "violet", "shelf_level": 1}`)
 	request, err := http.NewRequest("POST", "http://localhost/api/v1/book/", bytes.NewBuffer(body))
 	if err != nil {
 		t.Fatal(err)
@@ -44,9 +45,9 @@ func TestPostBook(t *testing.T) {
 		t.Errorf("wrong status code: got %v, want %v", status, http.StatusOK)
 	}
 
-	expected := fmt.Sprintf(`{"id":%v,"title":"Testing","subtitle":"How To Unit Test Advanced","author":"George M.","isbn":"247-2257225794","edition":2,"year":2018}`, targetBook.ID)
-	got := fmt.Sprintf(`{"id":%v,"title":"%s","subtitle":"%s","author":"%s","isbn":"%s","edition":%v,"year":%v}`, targetBook.ID, targetBook.Title,
-		targetBook.Subtitle, targetBook.Author, targetBook.ISBN, targetBook.Edition, targetBook.Year)
+	expected := fmt.Sprintf(`{"id":%v,"title":"Testing","subtitle":"How To Unit Test Advanced","author":"George M.","isbn":"247-2257225794","edition":2,"year":2018,"shelf_name":"violet","shelf_level":1}`, targetBook.ID)
+	got := fmt.Sprintf(`{"id":%v,"title":"%s","subtitle":"%s","author":"%s","isbn":"%s","edition":%v,"year":%v,"shelf_name":%s,"shelf_level":%v}`, targetBook.ID, targetBook.Title,
+		targetBook.Subtitle, targetBook.Author, targetBook.ISBN, targetBook.Edition, targetBook.Year, targetBook.ShelfName, targetBook.ShelfLevel)
 	if got != expected {
 		t.Errorf("unexpected body: got %v, want %v", got, expected)
 	}
@@ -54,8 +55,8 @@ func TestPostBook(t *testing.T) {
 
 func TestPostBooks(t *testing.T) {
 	body := []byte(`"books": [
-		{"title": "Testing", "subtitle": "How To Unit Test", "author": "George M.", "isbn": "247-2257225764", "edition": 2, "year": 2018},
-		{"title": "Testing Advanced", "subtitle": "How To Unit Test Advanced", "author": "George M.", "isbn": "247-2257255794", "edition": 1, "year": 2018}}
+		{"title": "Testing", "subtitle": "How To Unit Test", "author": "George M.", "isbn": "247-2257225764", "edition": 2, "year": 2018, "shelf_name": "violet", "shelf_level": 1},
+		{"title": "Testing Advanced", "subtitle": "How To Unit Test Advanced", "author": "George M.", "isbn": "247-2257255794", "edition": 1, "year": 2018, "shelf_name": "green", "shelf_level": 2}}
 		]`)
 	request, err := http.NewRequest("POST", "http://localhost/api/v1/books/", bytes.NewBuffer(body))
 	if err != nil {

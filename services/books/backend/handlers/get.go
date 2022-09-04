@@ -35,7 +35,7 @@ func GetBooks(w http.ResponseWriter, r *http.Request) {
 		var book Book
 
 		err = rows.Scan(&book.ID, &book.Title, &book.Subtitle,
-			&book.Author, &book.ISBN, &book.Edition, &book.Year)
+			&book.Author, &book.ISBN, &book.Edition, &book.Year, &book.ShelfName, &book.ShelfLevel)
 		if err != nil {
 			w.WriteHeader(500)
 			w.Header().Set("Content-Type", "application/json")
@@ -96,7 +96,7 @@ func GetBookById(w http.ResponseWriter, r *http.Request) {
 	var book Book
 	for row.Next() {
 		err = row.Scan(&book.ID, &book.Title, &book.Subtitle,
-			&book.Author, &book.ISBN, &book.Edition, &book.Year)
+			&book.Author, &book.ISBN, &book.Edition, &book.Year, &book.ShelfName, &book.ShelfLevel)
 		if err != nil {
 			w.WriteHeader(500)
 			w.Header().Set("Content-Type", "application/json")

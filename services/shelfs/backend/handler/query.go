@@ -10,10 +10,13 @@ var QueryType = graphql.NewObject(
 		Fields: graphql.Fields{
 			"shelf": &graphql.Field{
 				Type:        ShelfType,
-				Description: "Get shelf by id",
+				Description: "Get shelf by id or name",
 				Args: graphql.FieldConfigArgument{
 					"id": &graphql.ArgumentConfig{
 						Type: graphql.Int,
+					},
+					"name": &graphql.ArgumentConfig{
+						Type: graphql.String,
 					},
 				},
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
@@ -22,32 +25,55 @@ var QueryType = graphql.NewObject(
 						return nil, err
 					}
 
-					id, ok := p.Args["id"].(int)
-					if !ok {
-						return nil, ArgumentMissing{"id"}
-					}
-
-					sqlStatement := `SELECT * FROM shelfs WHERE id=$1`
-					row, err := db.Query(sqlStatement, id)
-					if err != nil {
-						return nil, err
-					}
-					defer row.Close()
-
-					var shelf Shelf
-					for row.Next() {
-						err = row.Scan(&shelf.ID, &shelf.Location, &shelf.Location)
+					id, okId := p.Args["id"].(int)
+					name, okName := p.Args["name"].(string)
+					if okId {
+						sqlStatement := `SELECT * FROM shelfs WHERE id=$1`
+						row, err := db.Query(sqlStatement, id)
 						if err != nil {
 							return nil, err
 						}
+						defer row.Close()
+
+						var shelf Shelf
+						for row.Next() {
+							err = row.Scan(&shelf.ID, &shelf.Name, &shelf.Location, &shelf.Location)
+							if err != nil {
+								return nil, err
+							}
+						}
+
+						err = row.Err()
+						if err != nil {
+							return nil, err
+						}
+
+						return shelf, nil
+					} else if okName {
+						sqlStatement := `SELECT * FROM shelfs WHERE name=$1`
+						row, err := db.Query(sqlStatement, name)
+						if err != nil {
+							return nil, err
+						}
+						defer row.Close()
+
+						var shelf Shelf
+						for row.Next() {
+							err = row.Scan(&shelf.ID, &shelf.Name, &shelf.Location, &shelf.Location)
+							if err != nil {
+								return nil, err
+							}
+						}
+
+						err = row.Err()
+						if err != nil {
+							return nil, err
+						}
+
+						return shelf, nil
 					}
 
-					err = row.Err()
-					if err != nil {
-						return nil, err
-					}
-
-					return shelf, nil
+					return nil, ArgumentMissing{"id or name"}
 				},
 			},
 			"shelfs": &graphql.Field{

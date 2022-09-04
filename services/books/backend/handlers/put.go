@@ -34,11 +34,12 @@ func PutBook(w http.ResponseWriter, r *http.Request) {
 	targetBook.ID = targetBookID
 
 	var updatedBook Book
-	sqlStatement := `UPDATE books SET title=$1, subtitle=$2, author=$3, isbn=$4, edition=$5, year=$6 WHERE id=$7 RETURNING id, title, subtitle,
-					 author, isbn, edition, year`
+	sqlStatement := `UPDATE books SET title=$1, subtitle=$2, author=$3, isbn=$4, edition=$5, year=$6, shelf_name=$7, shelf_level=$8
+					 WHERE id=$9 RETURNING id, title, subtitle, author, isbn, edition, year`
 	err = db.QueryRow(sqlStatement, &targetBook.Title, &targetBook.Subtitle, &targetBook.Author,
-		&targetBook.ISBN, &targetBook.Edition, &targetBook.Year, &targetBook.ID).Scan(&updatedBook.ID, &updatedBook.Title, &updatedBook.Subtitle,
-		&updatedBook.Author, &updatedBook.ISBN, &updatedBook.Edition, &updatedBook.Year)
+		&targetBook.ISBN, &targetBook.Edition, &targetBook.Year, &targetBook.ShelfName, &targetBook.ShelfLevel, &targetBook.ID).Scan(&updatedBook.ID,
+		&updatedBook.Title, &updatedBook.Subtitle, &updatedBook.Author, &updatedBook.ISBN, &updatedBook.Edition, &updatedBook.Year,
+		&updatedBook.ShelfName, &updatedBook.ShelfLevel)
 	if err != nil {
 		w.WriteHeader(204)
 		w.Header().Set("Content-Type", "application/json")

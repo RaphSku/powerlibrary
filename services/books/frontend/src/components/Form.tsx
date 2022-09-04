@@ -12,16 +12,20 @@ function Form() {
         author: "",
         isbn: "",
         edition: 0,
-        year: 0
+        year: 0,
+        shelf_name: "",
+        shelf_level: 0
     });
 
     function clear(event: any) {
-        (document.getElementById("title") as HTMLInputElement).value    = "";
-        (document.getElementById("subtitle") as HTMLInputElement).value = "";
-        (document.getElementById("author") as HTMLInputElement).value   = "";
-        (document.getElementById("isbn") as HTMLInputElement).value     = "";
-        (document.getElementById("edition") as HTMLInputElement).value  = "";
-        (document.getElementById("year") as HTMLInputElement).value     = "";
+        (document.getElementById("title") as HTMLInputElement).value       = "";
+        (document.getElementById("subtitle") as HTMLInputElement).value    = "";
+        (document.getElementById("author") as HTMLInputElement).value      = "";
+        (document.getElementById("isbn") as HTMLInputElement).value        = "";
+        (document.getElementById("edition") as HTMLInputElement).value     = "";
+        (document.getElementById("year") as HTMLInputElement).value        = "";
+        (document.getElementById("shelf_name") as HTMLInputElement).value  = "";
+        (document.getElementById("shelf_level") as HTMLInputElement).value = "";
 
         setSubmitValues({
             id: 0,
@@ -30,7 +34,9 @@ function Form() {
             author: "",
             isbn: "",
             edition: 0,
-            year: 0
+            year: 0,
+            shelf_name: "",
+            shelf_level: 0
         });
     }
 
@@ -44,10 +50,12 @@ function Form() {
             author: submitValues.author,
             isbn: submitValues.isbn,
             edition: Number(submitValues.edition), 
-            year: Number(submitValues.year)
+            year: Number(submitValues.year),
+            shelf_name: submitValues.shelf_name,
+            shelf_level: Number(submitValues.shelf_level)
         };
 
-        postBook(data)
+        postBook(data);
     }
 
     function handleChange(event: any) {
@@ -85,6 +93,14 @@ function Form() {
                     <label>
                         Year<br></br>
                         <input id="year" type="number" name="year" onChange={handleChange} />
+                    </label>
+                    <label>
+                        Shelf Name<br></br>
+                        <input id="shelf_name" type="text" name="shelf_name" onChange={handleChange} />
+                    </label>
+                    <label>
+                        Level in Shelf<br></br>
+                        <input id="shelf_level" type="number" name="shelf_level" onChange={handleChange} />
                     </label>
                 </form>
                 <div className="btns">

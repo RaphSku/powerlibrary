@@ -7,7 +7,16 @@ export interface Book {
     author: string,
     isbn: string,
     edition: number,
-    year: number
+    year: number,
+    shelf_name: string,
+    shelf_level: number
+}
+
+export interface Shelf {
+    id: number,
+    name: string,
+    room: string,
+    location: string
 }
 
 export async function getBooks() {

@@ -13,7 +13,8 @@ import (
 )
 
 func Setup(t *testing.T) int {
-	body := []byte(`{"title": "Testing", "subtitle": "How To Unit Test Advanced", "author": "George M.", "isbn": "247-2257225794", "edition": 2, "year": 2018}`)
+	body := []byte(`{"title": "Testing", "subtitle": "How To Unit Test Advanced", "author": "George M.", "isbn": "247-2257225794", 
+				     "edition": 2, "year": 2018, "shelf_name": "Violet", "shelf_level": 2}`)
 	request, err := http.NewRequest("POST", "http://localhost/api/v1/book/", bytes.NewBuffer(body))
 	if err != nil {
 		t.Fatal(err)
