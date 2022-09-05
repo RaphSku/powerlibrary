@@ -2,8 +2,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: pl-frontend-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
     - http:
@@ -15,3 +13,24 @@ spec:
                 name: pl-books-frontend-service
                 port:
                   number: 80
+          - path: /api/v1/book/
+            pathType: Prefix
+            backend:
+              service:
+                name: pl-books-backend-service
+                port:
+                  number: 8000
+          - path: /api/v1/books/
+            pathType: Prefix
+            backend:
+              service:
+                name: pl-books-backend-service
+                port:
+                  number: 8000
+          - path: /shelf
+            pathType: Prefix
+            backend:
+              service:
+                name: pl-shelfs-backend-service
+                port:
+                  number: 8081

@@ -11,7 +11,7 @@ import (
 )
 
 func CheckShelf(name string) (bool, string) {
-	response, err := http.Get(fmt.Sprintf(`http://localhost:8081/shelf?query={shelf(name:%q){name}}`, name))
+	response, err := http.Get(fmt.Sprintf(`http://10.104.78.169:8081/shelf?query={shelf(name:%q){name}}`, name))
 	if err != nil {
 		return false, "Query for shelf name failed!"
 	}

@@ -27,7 +27,7 @@ function FormShelf() {
     async function handleSubmit(event: any) {
         event.preventDefault();
 
-        fetch(`http://10.104.78.169:8081/shelf?query=mutation+_{create(name:"${submitValues.name}",room:"${submitValues.room}",location:"${submitValues.location}"){id,name,room,location}}`)
+        fetch(`http://192.168.49.2/shelf?query=mutation+_{create(name:"${submitValues.name}",room:"${submitValues.room}",location:"${submitValues.location}"){id,name,room,location}}`)
             .then((response) => {
                 console.log(response);
             })
