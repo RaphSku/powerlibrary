@@ -7,7 +7,8 @@ metadata:
 spec:
   containers:
     - name: shelfs-backend
-      image: pl-shelfs-v1
+      imagePullPolicy: Never
+      image: pl-shelfs
       ports:
         - containerPort: 8081
       resources:
@@ -17,3 +18,27 @@ spec:
         limits:
           memory: "128Mi"
           cpu: "500m"
+    - name: shelfs-database
+      image: postgres:13
+      env:
+        - name: POSTGRES_PASSWORD
+          value: test1
+        - name: POSTGRES_USER
+          value: raphael
+        - name: POSTGRES_DB
+          value: powerlibrary_shelf
+      ports:
+        - containerPort: 5432
+      volumeMounts:
+        - name: postgresql-storage
+          mountPath: /docker-entrypoint-initdb.d/
+      resources:
+        requests:      
+          memory: "1Gi"
+          cpu: "250m"
+        limits:
+          memory: "2Gi"
+          cpu: "500m"
+  volumes:
+    - name: postgresql-storage
+      emptyDir: {}

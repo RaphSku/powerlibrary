@@ -7,6 +7,7 @@ metadata:
 spec:
   containers:
     - name: books-backend
+      imagePullPolicy: Never
       image: pl-books-v1
       ports:
         - containerPort: 8000
@@ -17,3 +18,27 @@ spec:
         limits:
           memory: "128Mi"
           cpu: "500m"
+    - name: books-database
+      image: postgres:13
+      env:
+        - name: POSTGRES_PASSWORD
+          value: test1
+        - name: POSTGRES_USER
+          value: raphael
+        - name: POSTGRES_DB
+          value: powerlibrary
+      ports:
+        - containerPort: 5432
+      volumeMounts:
+        - name: postgresql-storage
+          mountPath: /docker-entrypoint-initdb.d/
+      resources:
+        requests:      
+          memory: "1Gi"
+          cpu: "250m"
+        limits:
+          memory: "2Gi"
+          cpu: "500m"
+  volumes:
+    - name: postgresql-storage
+      emptyDir: {}

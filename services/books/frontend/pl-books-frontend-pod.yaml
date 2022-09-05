@@ -11,3 +11,10 @@ spec:
       image: pl-books-frontend-v1
       ports:
         - containerPort: 3000
+      resources:
+        requests:      
+          memory: "1Gi"
+          cpu: "500m"
+        limits:
+          memory: "2Gi"
+          cpu: "1000m"
