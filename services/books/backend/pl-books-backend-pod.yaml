@@ -19,7 +19,8 @@ spec:
           memory: "128Mi"
           cpu: "500m"
     - name: books-database
-      image: postgres:13
+      imagePullPolicy: Never
+      image: pl-books-postgres:13
       env:
         - name: POSTGRES_PASSWORD
           value: test1
@@ -29,9 +30,6 @@ spec:
           value: powerlibrary
       ports:
         - containerPort: 5432
-      volumeMounts:
-        - name: postgresql-storage
-          mountPath: /docker-entrypoint-initdb.d/
       resources:
         requests:      
           memory: "1Gi"
@@ -39,6 +37,3 @@ spec:
         limits:
           memory: "2Gi"
           cpu: "500m"
-  volumes:
-    - name: postgresql-storage
-      emptyDir: {}
