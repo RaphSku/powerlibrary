@@ -22,7 +22,7 @@ func CheckShelf(name string) (bool, string) {
 	}
 
 	bodyString := string(body)
-	match, err := regexp.MatchString(`"name":\\K"\w*"`, bodyString)
+	match, err := regexp.MatchString(`"name":"\\K\w*[^"]`, bodyString)
 	if err != nil {
 		return false, "Regex Pattern Matching did not work!"
 	}
