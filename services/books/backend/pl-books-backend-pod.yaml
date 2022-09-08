@@ -37,3 +37,10 @@ spec:
         limits:
           memory: "2Gi"
           cpu: "500m"
+      volumeMounts:
+        - name: pl-books-persistent-storage
+          mountPath: /var/lib/postgresql/data
+  volumes:
+  - name: pl-books-persistent-storage
+    persistentVolumeClaim:
+      claimName: pl-books-pvc
