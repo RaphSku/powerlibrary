@@ -54,8 +54,8 @@ func PostBook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var newID int
-	sqlStatement := `INSERT INTO books(Title, Subtitle, Author, ISBN, Edition, Year, ShelfName, ShelfLevel) 
-					 VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING ID`
+	sqlStatement := `INSERT INTO books(title, subtitle, author, isbn, edition, year, shelf_name, shelf_level) 
+					 VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`
 	err = db.QueryRow(sqlStatement, &book.Title, &book.Subtitle, &book.Author, &book.ISBN, &book.Edition,
 		&book.Year, &book.ShelfName, &book.ShelfLevel).Scan(&newID)
 	if err != nil {
@@ -107,8 +107,8 @@ func PostBooks(w http.ResponseWriter, r *http.Request) {
 		}
 
 		var newID int
-		sqlStatement := `INSERT INTO books(Title, Subtitle, Author, ISBN, Edition, Year, ShelfName, ShelfLevel) 
-						 VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING ID`
+		sqlStatement := `INSERT INTO books(title, subtitle, author, isbn, edition, year, shelf_name, shelf_level) 
+						 VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`
 		db.QueryRow(sqlStatement, &book.Title, &book.Subtitle, &book.Author, &book.ISBN, &book.Edition, &book.Year,
 			&book.ShelfName, &book.ShelfLevel).Scan(&newID)
 

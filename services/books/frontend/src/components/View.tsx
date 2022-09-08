@@ -29,6 +29,8 @@ function View() {
                             <li><span>ISBN</span><br></br>{book.isbn}</li>
                             <li><span>Edition</span><br></br>{book.edition}</li>
                             <li><span>Year</span><br></br>{book.year}</li>
+                            <li><span>Shelf Name</span><br></br>{book.shelf_name}</li>
+                            <li><span>Shelf Level</span><br></br>{book.shelf_level}</li>
                         </ul>
                     </div>
                 )}
