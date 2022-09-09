@@ -22,6 +22,8 @@ spec:
       imagePullPolicy: Never
       image: pl-shelfs-postgres:13
       env:
+        - name: PGDATA
+          value: /var/lib/pgdata
         - name: POSTGRES_PASSWORD
           value: test1
         - name: POSTGRES_USER
@@ -40,6 +42,7 @@ spec:
       volumeMounts:
         - name: pl-shelfs-persistent-storage
           mountPath: /var/lib/postgresql/data
+          readOnly: false
   volumes:
   - name: pl-shelfs-persistent-storage
     persistentVolumeClaim:
