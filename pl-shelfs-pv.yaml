@@ -11,4 +11,4 @@ spec:
   persistentVolumeReclaimPolicy: Recycle
   storageClassName: "powerlibrary-shelfs-scn"
   hostPath:
-    path: "/volumes/powerlibrary"
+    path: "/data/powerlibrary-shelf"
