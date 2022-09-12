@@ -74,6 +74,9 @@ and the shelf service is set up!
   <img src="assets/pl-shelf-form.png" width="45%"/>
   <img src="assets/pl-book-form.png" width="45%"/>
 </div>
+<div align="center">
+  <img src="assets/pl-book-view.png" width="40%"/>
+</div>
 
 ### Note
 When using minikube it could be that your data inside of the databases get lost. A fix for that is not available for now but will perhaps come in the future.
